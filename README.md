@@ -120,17 +120,6 @@ You can deploy easily using:
 * Vercel
 
 Just drag & drop or connect your GitHub repo.
-
----
-
-## 🔮 Future Improvements
-
-* Cloud sync (login system)
-* Mobile app version
-* Notifications / reminders
-* Advanced analytics
-* Habit categories
-
 ---
 
 ## 🤝 Contributing
