@@ -39,7 +39,6 @@ export default function YearView() {
     let monthTotal = 0;
     let monthCount = 0;
     let perfect = 0;
-
     for (const [key, ratio] of Object.entries(yearData)) {
       if (ratio === 1) perfect++;
       if (key.startsWith(currentMonth)) {
@@ -47,7 +46,6 @@ export default function YearView() {
         monthCount++;
       }
     }
-
     return {
       monthlyAvg: monthCount > 0 ? Math.round((monthTotal / monthCount) * 100) : 0,
       perfectDays: perfect,
@@ -71,32 +69,32 @@ export default function YearView() {
   function getCellClasses(date: Date, key: string): string {
     const today = isToday(date);
     const future = isFuture(date);
-    const base = "w-5 h-5 sm:w-6 sm:h-6 rounded-full transition-all cursor-pointer";
+    const base = "w-4 h-4 rounded-full transition-all cursor-pointer";
 
-    if (future) return `${base} bg-white shadow-[0_0_6px_1px_rgba(255,255,255,0.4)]`;
+    if (future) return `${base} bg-white shadow-[0_0_4px_1px_rgba(255,255,255,0.4)]`;
 
     if (today) {
       const ratio = yearData[key];
-      let color = "bg-white shadow-[0_0_10px_3px_rgba(255,255,255,0.6)]";
+      let color = "bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.6)]";
       if (ratio !== undefined) {
-        if (ratio > 0.8) color = "bg-emerald-400 shadow-[0_0_10px_3px_rgba(52,211,153,0.7)]";
-        else if (ratio > 0.5) color = "bg-yellow-400 shadow-[0_0_10px_3px_rgba(250,204,21,0.7)]";
-        else if (ratio > 0) color = "bg-orange-400 shadow-[0_0_10px_3px_rgba(251,146,60,0.7)]";
-        else color = "bg-red-500 shadow-[0_0_10px_3px_rgba(239,68,68,0.7)]";
+        if (ratio > 0.8) color = "bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.7)]";
+        else if (ratio > 0.5) color = "bg-yellow-400 shadow-[0_0_8px_2px_rgba(250,204,21,0.7)]";
+        else if (ratio > 0) color = "bg-orange-400 shadow-[0_0_8px_2px_rgba(251,146,60,0.7)]";
+        else color = "bg-red-500 shadow-[0_0_8px_2px_rgba(239,68,68,0.7)]";
       }
-      return `${base} ${color} ring-[3px] ring-primary ring-offset-2 ring-offset-background`;
+      return `${base} ${color} ring-2 ring-primary ring-offset-1 ring-offset-background`;
     }
 
     if (yearData[key] !== undefined) {
       const ratio = yearData[key];
-      if (ratio > 0.8) return `${base} bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.6)]`;
-      if (ratio > 0.5) return `${base} bg-yellow-400 shadow-[0_0_8px_2px_rgba(250,204,21,0.6)]`;
-      if (ratio > 0) return `${base} bg-orange-400 shadow-[0_0_8px_2px_rgba(251,146,60,0.6)]`;
-      return `${base} bg-red-500 shadow-[0_0_8px_2px_rgba(239,68,68,0.6)]`;
+      if (ratio > 0.8) return `${base} bg-emerald-400 shadow-[0_0_6px_1px_rgba(52,211,153,0.6)]`;
+      if (ratio > 0.5) return `${base} bg-yellow-400 shadow-[0_0_6px_1px_rgba(250,204,21,0.6)]`;
+      if (ratio > 0) return `${base} bg-orange-400 shadow-[0_0_6px_1px_rgba(251,146,60,0.6)]`;
+      return `${base} bg-red-500 shadow-[0_0_6px_1px_rgba(239,68,68,0.6)]`;
     }
 
-    if (isPast(date)) return `${base} bg-red-500 shadow-[0_0_8px_2px_rgba(239,68,68,0.6)]`;
-    return `${base} bg-white shadow-[0_0_6px_1px_rgba(255,255,255,0.4)]`;
+    if (isPast(date)) return `${base} bg-red-500 shadow-[0_0_6px_1px_rgba(239,68,68,0.6)]`;
+    return `${base} bg-white shadow-[0_0_4px_1px_rgba(255,255,255,0.4)]`;
   }
 
   function getStatusLabel(date: Date, key: string, ratio: number | undefined): { label: string; color: string } {
@@ -119,7 +117,6 @@ export default function YearView() {
     const future = isFuture(date);
     const ratio = yearData[key];
     const rect = (e.target as HTMLElement).getBoundingClientRect();
-
     let completed = 0;
     let total = 0;
     if (!future) {
@@ -127,17 +124,13 @@ export default function YearView() {
       total = d.tasks.length;
       completed = d.tasks.filter((t) => t.completed).length;
     }
-
     setTooltip({
       x: rect.left + rect.width / 2,
       y: rect.top,
-      date,
-      key,
-      ratio,
+      date, key, ratio,
       isFutureDay: future,
       isTodayDay: isToday(date),
-      completed,
-      total,
+      completed, total,
     });
   }
 
@@ -146,71 +139,69 @@ export default function YearView() {
   }
 
   return (
-    <div className="animate-fade-in" onMouseLeave={() => setTooltip(null)}>
-      <div className="flex items-center gap-2 mb-1">
-        <div className="w-1 h-6 rounded-full bg-primary" />
-        <h1 className="text-xl font-bold text-foreground">Year View</h1>
-      </div>
-      <p className="text-sm text-muted-foreground mb-6">
-        {year} — color reflects daily task completion
-      </p>
+    <div className="animate-fade-in h-[calc(100vh-48px)] flex flex-col overflow-hidden px-4 py-2" onMouseLeave={() => setTooltip(null)}>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <div className="bg-card border border-blue-500/20 rounded-lg p-4 shadow-[0_0_15px_2px_rgba(59,130,246,0.15)]">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <Target className="w-3.5 h-3.5 text-blue-400" /> Today
-          </div>
-          <div className="text-2xl font-bold text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">{todayData.pct}%</div>
-          <div className="text-xs text-muted-foreground">{todayData.completed}/{todayData.total} tasks</div>
+      {/* Header + Stats Row */}
+      <div className="flex items-center gap-6 mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-primary" />
+          <h1 className="text-base font-bold text-foreground">Year View</h1>
+          <span className="text-xs text-muted-foreground ml-1">{year}</span>
         </div>
-        <div className="bg-card border border-orange-500/20 rounded-lg p-4 shadow-[0_0_15px_2px_rgba(249,115,22,0.15)]">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <Flame className="w-3.5 h-3.5 text-orange-400" /> Streak
+
+        {/* Stat Cards inline */}
+        <div className="flex gap-2 flex-1">
+          <div className="flex-1 bg-card border border-blue-500/20 rounded-lg px-3 py-1.5 shadow-[0_0_10px_1px_rgba(59,130,246,0.15)] flex items-center gap-2">
+            <Target className="w-3 h-3 text-blue-400 shrink-0" />
+            <span className="text-xs text-muted-foreground">Today</span>
+            <span className="text-sm font-bold text-blue-400 drop-shadow-[0_0_6px_rgba(59,130,246,0.8)] ml-auto">{todayData.pct}%</span>
+            <span className="text-[10px] text-muted-foreground">{todayData.completed}/{todayData.total}</span>
           </div>
-          <div className="text-2xl font-bold text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]">{streak}</div>
-          <div className="text-xs text-muted-foreground">days &gt;80%</div>
-        </div>
-        <div className="bg-card border border-yellow-500/20 rounded-lg p-4 shadow-[0_0_15px_2px_rgba(234,179,8,0.15)]">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <TrendingUp className="w-3.5 h-3.5 text-yellow-400" /> Monthly avg
+          <div className="flex-1 bg-card border border-orange-500/20 rounded-lg px-3 py-1.5 shadow-[0_0_10px_1px_rgba(249,115,22,0.15)] flex items-center gap-2">
+            <Flame className="w-3 h-3 text-orange-400 shrink-0" />
+            <span className="text-xs text-muted-foreground">Streak</span>
+            <span className="text-sm font-bold text-orange-400 drop-shadow-[0_0_6px_rgba(249,115,22,0.8)] ml-auto">{streak}</span>
+            <span className="text-[10px] text-muted-foreground">days</span>
           </div>
-          <div className="text-2xl font-bold text-yellow-400 drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]">{monthlyAvg}%</div>
-          <div className="text-xs text-muted-foreground">this month</div>
-        </div>
-        <div className="bg-card border border-emerald-500/20 rounded-lg p-4 shadow-[0_0_15px_2px_rgba(52,211,153,0.15)]">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <CalendarCheck className="w-3.5 h-3.5 text-emerald-400" /> Perfect days
+          <div className="flex-1 bg-card border border-yellow-500/20 rounded-lg px-3 py-1.5 shadow-[0_0_10px_1px_rgba(234,179,8,0.15)] flex items-center gap-2">
+            <TrendingUp className="w-3 h-3 text-yellow-400 shrink-0" />
+            <span className="text-xs text-muted-foreground">Monthly</span>
+            <span className="text-sm font-bold text-yellow-400 drop-shadow-[0_0_6px_rgba(234,179,8,0.8)] ml-auto">{monthlyAvg}%</span>
+            <span className="text-[10px] text-muted-foreground">avg</span>
           </div>
-          <div className="text-2xl font-bold text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]">{perfectDays}</div>
-          <div className="text-xs text-muted-foreground">100% complete</div>
+          <div className="flex-1 bg-card border border-emerald-500/20 rounded-lg px-3 py-1.5 shadow-[0_0_10px_1px_rgba(52,211,153,0.15)] flex items-center gap-2">
+            <CalendarCheck className="w-3 h-3 text-emerald-400 shrink-0" />
+            <span className="text-xs text-muted-foreground">Perfect</span>
+            <span className="text-sm font-bold text-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.8)] ml-auto">{perfectDays}</span>
+            <span className="text-[10px] text-muted-foreground">days</span>
+          </div>
         </div>
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-6 text-xs text-muted-foreground">
+      <div className="flex items-center gap-3 mb-2 text-[10px] text-muted-foreground">
         <span className="font-medium">Legend:</span>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_6px_1px_rgba(239,68,68,0.6)]" /> Missed (0%)</div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-orange-400 shadow-[0_0_6px_1px_rgba(251,146,60,0.6)]" /> Weak (1–50%)</div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_6px_1px_rgba(250,204,21,0.6)]" /> Good (51–80%)</div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_6px_1px_rgba(52,211,153,0.6)]" /> Perfect (81–100%)</div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-white ring-2 ring-primary ring-offset-1 ring-offset-background shadow-[0_0_8px_1px_rgba(255,255,255,0.5)]" /> Today</div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-white shadow-[0_0_6px_1px_rgba(255,255,255,0.4)]" /> Upcoming</div>
+        <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_4px_1px_rgba(239,68,68,0.6)]" /> Missed</div>
+        <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-orange-400 shadow-[0_0_4px_1px_rgba(251,146,60,0.6)]" /> Weak</div>
+        <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_4px_1px_rgba(250,204,21,0.6)]" /> Good</div>
+        <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_4px_1px_rgba(52,211,153,0.6)]" /> Perfect</div>
+        <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-white ring-2 ring-primary ring-offset-1 ring-offset-background" /> Today</div>
+        <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-white/80" /> Upcoming</div>
       </div>
 
       {/* Month Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-6 gap-2 content-start flex-1 min-h-0">
         {months.map((month) => (
-          <div key={month.name} className="bg-card border border-border rounded-lg p-4">
-            <h3 className="text-sm font-bold text-foreground mb-3">{month.name}</h3>
-            <div className="grid grid-cols-7 gap-1 mb-1">
+          <div key={month.name} className="bg-card border border-border rounded-lg p-2 flex flex-col h-fit">
+            <h3 className="text-[10px] font-bold text-foreground mb-1">{month.name}</h3>
+            <div className="grid grid-cols-7 gap-[2px] mb-0.5">
               {DAY_HEADERS.map((d, i) => (
-                <div key={i} className="text-[9px] text-muted-foreground text-center">{d}</div>
+                <div key={i} className="text-[8px] text-muted-foreground text-center">{d}</div>
               ))}
             </div>
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-[2px]">
               {Array.from({ length: month.startDay }).map((_, i) => (
-                <div key={`empty-${i}`} className="w-5 h-5 sm:w-6 sm:h-6" />
+                <div key={`empty-${i}`} className="w-4 h-4" />
               ))}
               {month.days.map((day) => (
                 <div
@@ -229,30 +220,16 @@ export default function YearView() {
       {tooltip && (
         <div
           className="fixed z-50 pointer-events-none"
-          style={{
-            left: tooltip.x,
-            top: tooltip.y - 8,
-            transform: "translate(-50%, -100%)",
-          }}
+          style={{ left: tooltip.x, top: tooltip.y - 8, transform: "translate(-50%, -100%)" }}
         >
           <div className="bg-card border border-border rounded-lg shadow-xl p-3 min-w-[180px]">
-            <div className="text-xs font-semibold text-foreground mb-2">
-              {formatTooltipDate(tooltip.date)}
-            </div>
+            <div className="text-xs font-semibold text-foreground mb-2">{formatTooltipDate(tooltip.date)}</div>
             {(() => {
               const { label, color } = getStatusLabel(tooltip.date, tooltip.key, tooltip.ratio);
-              return (
-                <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mb-2 ${color}`}>
-                  {label}
-                </span>
-              );
+              return <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mb-2 ${color}`}>{label}</span>;
             })()}
             <div className="text-xs text-muted-foreground">
-              {tooltip.isFutureDay
-                ? "No task data yet"
-                : tooltip.ratio !== undefined
-                ? `${tooltip.completed}/${tooltip.total} tasks · ${Math.round(tooltip.ratio * 100)}%`
-                : "No task data"}
+              {tooltip.isFutureDay ? "No task data yet" : tooltip.ratio !== undefined ? `${tooltip.completed}/${tooltip.total} tasks · ${Math.round(tooltip.ratio * 100)}%` : "No task data"}
             </div>
           </div>
         </div>
