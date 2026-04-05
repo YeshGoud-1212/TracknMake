@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "@/components/ui/toaster";
 import Landing from "./pages/Landing";
 import YearView from "./pages/YearView";
@@ -20,7 +19,6 @@ const App = () => (
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-    <Analytics />
   </>
 );
 
