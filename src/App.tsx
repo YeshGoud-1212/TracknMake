@@ -5,7 +5,7 @@ import YearView from "./pages/YearView";
 import Timetable from "./pages/Timetable";
 import DashboardLayout from "./components/DashboardLayout";
 import NotFound from "./pages/NotFound";
-
+import {Analytics} from "@vercel/analytics/next";
 const App = () => (
   <>
     <Toaster />
@@ -19,6 +19,7 @@ const App = () => (
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
+    <Analytics />
   </>
 );
 
