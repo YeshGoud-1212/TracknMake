@@ -139,7 +139,7 @@ export default function YearView() {
   }
 
   return (
-    <div className="animate-fade-in h-[calc(100vh-48px)] flex flex-col overflow-hidden px-4 py-2" onMouseLeave={() => setTooltip(null)}>
+    <div className="animate-fade-in sm:h-[calc(100vh-48px)] flex flex-col sm:overflow-hidden px-3 sm:px-4 py-2" onMouseLeave={() => setTooltip(null)}>
 
       {/* Header + Stats Row */}
       <div className="flex items-center gap-6 mb-2">
@@ -190,7 +190,7 @@ export default function YearView() {
       </div>
 
       {/* Month Grid */}
-      <div className="grid grid-cols-6 gap-2 content-start flex-1 min-h-0">
+      <div className="grid grid-cols-6 gap-2 content-start flex-1 min-h-0 overflow-x-auto sm:overflow-x-visible">
         {months.map((month) => (
           <div key={month.name} className="bg-card border border-border rounded-lg p-2 flex flex-col h-fit">
             <h3 className="text-[10px] font-bold text-foreground mb-1">{month.name}</h3>

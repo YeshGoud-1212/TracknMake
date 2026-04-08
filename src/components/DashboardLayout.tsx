@@ -5,7 +5,8 @@ export default function DashboardLayout() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="max-w-[90rem] mx-50 px-40 py-6">
+      {/* Mobile: full width with smaller padding. Desktop: unchanged max-w-[90rem] */}
+      <main className="w-full max-w-[90rem] mx-auto px-3 sm:px-8 py-4 sm:py-8">
         <Outlet />
       </main>
     </div>
