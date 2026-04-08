@@ -5,7 +5,7 @@ import YearView from "./pages/YearView";
 import Timetable from "./pages/Timetable";
 import DashboardLayout from "./components/DashboardLayout";
 import NotFound from "./pages/NotFound";
-import {Analytics} from "@vercel/analytics/next";
+import {Analytics} from "@vercel/analytics/react";
 const App = () => (
   <>
     <Toaster />
