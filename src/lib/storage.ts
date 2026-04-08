@@ -121,6 +121,12 @@ export function toggleTask(date: Date, taskId: string): DayData {
     t.id === taskId ? { ...t, completed: !t.completed } : t
   );
   saveDayData(date, data);
+
+  // Track that user marked a task today
+  import("./notifications").then(({ updateLastMarked }) => {
+    updateLastMarked();
+  });
+
   return data;
 }
 
