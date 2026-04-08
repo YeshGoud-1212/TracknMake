@@ -69,7 +69,7 @@ export default function YearView() {
   function getCellClasses(date: Date, key: string): string {
     const today = isToday(date);
     const future = isFuture(date);
-    const base = "w-4 h-4 rounded-full transition-all cursor-pointer";
+    const base = "w-4 h-4 sm:w-4 sm:h-4 rounded-full transition-all cursor-pointer";
 
     if (future) return `${base} bg-white shadow-[0_0_4px_1px_rgba(255,255,255,0.4)]`;
 
@@ -139,7 +139,7 @@ export default function YearView() {
   }
 
   return (
-    <div className="animate-fade-in sm:h-[calc(100vh-48px)] flex flex-col sm:overflow-hidden px-3 sm:px-4 py-2" onMouseLeave={() => setTooltip(null)}>
+    <div className="animate-fade-in sm:h-[calc(100vh-48px)] flex flex-col sm:overflow-hidden px-3 sm:px-4 py-2 overflow-y-auto" onMouseLeave={() => setTooltip(null)}>
 
       {/* Header + Stats Row */}
       <div className="flex items-center gap-6 mb-2">
@@ -190,18 +190,18 @@ export default function YearView() {
       </div>
 
       {/* Month Grid */}
-      <div className="grid grid-cols-6 gap-2 content-start flex-1 min-h-0 overflow-x-auto sm:overflow-x-visible">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-6 sm:gap-2 sm:content-start sm:flex-1 sm:min-h-0">
         {months.map((month) => (
-          <div key={month.name} className="bg-card border border-border rounded-lg p-2 flex flex-col h-fit">
+          <div key={month.name} className="bg-card border border-border rounded-lg p-4 sm:p-2 flex flex-col h-fit">
             <h3 className="text-[10px] font-bold text-foreground mb-1">{month.name}</h3>
             <div className="grid grid-cols-7 gap-[2px] mb-0.5">
               {DAY_HEADERS.map((d, i) => (
                 <div key={i} className="text-[8px] text-muted-foreground text-center">{d}</div>
               ))}
             </div>
-            <div className="grid grid-cols-7 gap-[2px]">
+            <div className="grid grid-cols-7 gap-1 sm:gap-[2px]">
               {Array.from({ length: month.startDay }).map((_, i) => (
-                <div key={`empty-${i}`} className="w-4 h-4" />
+                <div key={`empty-${i}`} className="w-4 h-4 sm:w-4 sm:h-4" />
               ))}
               {month.days.map((day) => (
                 <div
